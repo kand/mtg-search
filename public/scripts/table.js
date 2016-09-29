@@ -6,9 +6,23 @@
       var thead = document.createElement('thead');
       var tbody = document.createElement('tbody');
 
+      table.appendChild(thead);
+      table.appendChild(tbody);
+
       var columns = [{
         label: 'Name',
         field: 'name'
+      }, {
+        label: 'Set',
+        field: 'currentSet'
+      }, {
+        label: '# in Set',
+        field: function (card) {
+          return card.number ? card.number : 'N/A';
+        }
+      }, {
+        label: 'Mana Cost',
+        field: 'manaCost',
       }];
 
       var theadtr = document.createElement('tr');
@@ -20,11 +34,11 @@
         theadtr.appendChild(th);
       });
       thead.appendChild(theadtr);
-      table.appendChild(thead);
 
       Object.keys(cardDataBySet).forEach(function (setAbbrv) {
         cardDataBySet[setAbbrv].cards.forEach(function (card) {
           var tr = document.createElement('tr');
+          card.currentSet = setAbbrv;
 
           columns.forEach(function (column) {
             var td = document.createElement('td');
@@ -32,11 +46,9 @@
             tr.appendChild(td);
           });
 
-          table.appendChild(tr);
+          tbody.appendChild(tr);
         });
       });
-
-      table.appendChild(tbody);
 
       return table;
     }

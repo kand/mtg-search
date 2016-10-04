@@ -22,7 +22,7 @@
         }
       }, {
         label: 'Mana Cost',
-        field: 'manaCost',
+        field: 'manaCost'
       }];
 
       var theadtr = document.createElement('tr');

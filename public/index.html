@@ -3,20 +3,20 @@
     <title>MTG Search</title>
   </head>
   <body>
-    <form id="searchForm">
-      <label for="search">Search</label>
-      <input
-          name="search"
-          type="text">
-      <button>Search</button>
-    </form>
 
-    <div id="cardsListContainer">
+    <div id="toolbar">
+      <button>Deck</button>
+    </div>
+    <div id="cardsListContainer"></div>
+    <div id="deckListContainer">
+      <h2>Deck</h2>
     </div>
 
     <script>window.App = {};</script>
 
     <script src="/scripts/api.js"></script>
+    <script src="/scripts/deck/deck.js"></script>
+    <script src="/scripts/deck/deck-view.js"></script>
     <script src="/scripts/table.js"></script>
 
     <script>
@@ -26,13 +26,6 @@
               .appendChild(window.App.Table.build(sets));
         });
 
-      document.addEventListener('DOMContentLoaded', function () {
-
-        document.getElementById('searchForm')
-          .addEventListener('submit', function (e) {
-            e.preventDefault();
-          });
-      });
     </script>
   </body>
 </html>

@@ -16,7 +16,7 @@
         label: 'Set',
         field: 'currentSet'
       }, {
-        label: '# in Set',
+        label: '#',
         field: function (card) {
           return card.number ? card.number : 'N/A';
         }

@@ -22,9 +22,8 @@
     <script>
       window.App.Api.getSets('/resources/AllSets.json')
         .then(function (sets) {
-            document.getElementById('cardsListContainer').appendChild(
-              window.App.Table.build(sets)
-            );
+            document.getElementById('cardsListContainer')
+              .appendChild(window.App.Table.build(sets));
         });
 
       document.addEventListener('DOMContentLoaded', function () {

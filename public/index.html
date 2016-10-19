@@ -1,6 +1,8 @@
 <html>
   <head>
     <title>MTG Search</title>
+
+    <link rel="stylesheet" href="/styles/main.css">
   </head>
   <body>
 
@@ -22,7 +24,7 @@
     <script src="/scripts/table.js"></script>
 
     <script>
-      window.App.Api.getSets('/resources/AllSets.json')
+      window.App.Api.getSets('/resources/KLD.json')
         .then(function (sets) {
             document.getElementById('cardsListContainer')
               .appendChild(window.App.Table.build(sets));

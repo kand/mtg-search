@@ -14,7 +14,14 @@
         request.addEventListener('readystatechange', function () {
           if (this.readyState === XMLHttpRequest.DONE) {
             if (this.status === 200) {
-              cardCache = JSON.parse(this.response);
+              var data = JSON.parse(this.response);
+              if (Array.isArray(data)) {
+                cardCache = data;
+              } else {
+                cardCache = {};
+                cardCache[data.name] = data;
+              }
+
               resolve(cardCache);
             } else {
               reject();

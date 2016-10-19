@@ -16,8 +16,6 @@
       <h2>Deck</h2>
     </div>
 
-    <script src="https://cdn.rawgit.com/amark/gun/master/gun.js"></script>
-
     <script>window.App = {};</script>
 
     <script src="/scripts/api.js"></script>
@@ -26,7 +24,7 @@
     <script src="/scripts/table.js"></script>
 
     <script>
-      window.App.Api.getSets('/resources/KLD.json')
+      window.App.Api.getSets('http://0.0.0.0:3000/sets/KLD/')
         .then(function (sets) {
             document.getElementById('cardsListContainer')
               .appendChild(window.App.Table.build(sets));

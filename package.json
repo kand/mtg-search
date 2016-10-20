@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "debug": "nodemon debug server/index.js",
     "start": "nodemon server/index.js",
     "start-public": "http-server -o",
     "start-api": "node server/index.js"

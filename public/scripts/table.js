@@ -1,6 +1,6 @@
 !(function (App) {
 
-  var buildTableHead = function (columns) {
+  var buildTableHead = function (tableElement, columns) {
     var thead = document.createElement('thead');
 
     var theadtr = document.createElement('tr');
@@ -19,15 +19,36 @@
           if (!currentSort) {
             this.dataset.sortDirection = 1;
             sorts.classList.add('fa-sort-asc');
-            console.log('would sort ' + column.sorts + ' ascending');
+
+            App.Api.getSets('http://0.0.0.0:3000/sets/KLD?__sort=' + column.sorts)
+              .then(function (cardDataBySet) {
+                tableElement.replaceChild(
+                  buildTableBody(cardDataBySet, columns),
+                  tableElement.querySelector('tbody')
+                );
+              });
           } else if (currentSort === 1) {
             sorts.classList.add('fa-sort-desc');
             this.dataset.sortDirection = -1;
-            console.log('would sort ' + column.sorts + ' descending');
+
+            App.Api.getSets('http://0.0.0.0:3000/sets/KLD?__sort=-' + column.sorts)
+              .then(function (cardDataBySet) {
+                tableElement.replaceChild(
+                  buildTableBody(cardDataBySet, columns),
+                  tableElement.querySelector('tbody')
+                );
+              });
           } else {
             sorts.classList.add('fa-sort');
             this.dataset.sortDirection = 0;
-            console.log('would sort ' + column.sorts + ' off');
+
+            App.Api.getSets('http://0.0.0.0:3000/sets/KLD')
+              .then(function (cardDataBySet) {
+                tableElement.replaceChild(
+                  buildTableBody(cardDataBySet, columns),
+                  tableElement.querySelector('tbody')
+                );
+              });
           }
 
         });
@@ -84,7 +105,7 @@
         field: 'manaCost'
       }];
 
-      table.appendChild(buildTableHead(columns));
+      table.appendChild(buildTableHead(table, columns));
       table.appendChild(buildTableBody(cardDataBySet, columns));
 
       return table;

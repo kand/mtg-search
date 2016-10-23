@@ -1,13 +1,8 @@
 !(function (App) {
 
-  var cardCache;
-
   App.Api = {
     getSets: function (endpoint) {
       return new Promise(function (resolve, reject) {
-        if (cardCache) {
-          resolve(cardCache);
-        }
 
         var request = new XMLHttpRequest();
 
@@ -15,14 +10,16 @@
           if (this.readyState === XMLHttpRequest.DONE) {
             if (this.status === 200) {
               var data = JSON.parse(this.response);
+              var responseObj;
+
               if (Array.isArray(data)) {
-                cardCache = data;
+                responseObj = data;
               } else {
-                cardCache = {};
-                cardCache[data.name] = data;
+                responseObj = {};
+                responseObj[data.name] = data;
               }
 
-              resolve(cardCache);
+              resolve(responseObj);
             } else {
               reject();
             }

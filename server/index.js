@@ -10,8 +10,16 @@ app.get('/sets/:setAbbrv/', (req, res) => {
 
   if (queryKeys.length > 0) {
 
+    let cardProperties = queryKeys.filter(key => !key.startsWith('__'));
+    let specialProperties = queryKeys
+      .filter(key => key.startsWith('__'))
+      .reduce(function (props, key) {
+        props[key] = req.query[key];
+        return props;
+      }, {});
+
     data.cards = data.cards.filter((card) => {
-      return queryKeys.reduce((include, paramName) => {
+      return cardProperties.reduce((include, paramName) => {
 
         let cardValue = card[paramName];
         let queryValue = req.query[paramName];
@@ -29,8 +37,24 @@ app.get('/sets/:setAbbrv/', (req, res) => {
 
       }, true);
     });
+
+    if (typeof specialProperties.__sort === 'string') {
+     let sorts = specialProperties.__sort.split(',');
+
+      data.cards.sort((card1, card2) => sorts.reduce((currentSort, sortField) => {
+
+        if (card1[sortField] < card2[sortField]) {
+          return -1;
+        }
+        if (card1[sortField] > card2[sortField]) {
+          return 1;
+        }
+        return 0;
+      }, 0));
+    }
   }
 
+  // allow local CORs
   res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   res.send(data);

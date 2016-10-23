@@ -42,14 +42,24 @@ app.get('/sets/:setAbbrv/', (req, res) => {
      let sorts = specialProperties.__sort.split(',');
 
       data.cards.sort((card1, card2) => sorts.reduce((currentSort, sortField) => {
+        let ascendingSort = 1;
+        let fieldName;
+        let sortResult = 0;
 
-        if (card1[sortField] < card2[sortField]) {
-          return -1;
+        if (sortField.startsWith('-')) {
+          ascendingSort = -1;
+          fieldName = sortField.substring(1);
+        } else {
+          fieldName = sortField;
         }
-        if (card1[sortField] > card2[sortField]) {
-          return 1;
+
+        if (card1[fieldName] < card2[fieldName]) {
+          sortResult = -1;
+        } else if (card1[fieldName] > card2[fieldName]) {
+          sortResult = 1;
         }
-        return 0;
+
+        return ascendingSort * sortResult;
       }, 0));
     }
   }

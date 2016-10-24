@@ -3,7 +3,24 @@
   var buildTableHead = function (tableElement, columns) {
     var thead = document.createElement('thead');
 
-    var theadtr = document.createElement('tr');
+    var searchRow = document.createElement('tr');
+
+    var searchInput = document.createElement('input');
+    searchInput.placeholder = 'Search for cards...';
+    searchInput.addEventListener('keyup', function () {
+      App.Api.getSets('http://0.0.0.0:3000/sets/KLD?name=' + this.value)
+        .then(function (cardDataBySet) {
+          tableElement.replaceChild(
+            buildTableBody(cardDataBySet, columns),
+            tableElement.querySelector('tbody')
+          );
+        });
+    });
+    searchRow.appendChild(searchInput);
+
+    thead.appendChild(searchRow);
+
+    var columnLabels = document.createElement('tr');
     columns.forEach(function (column) {
       var th = document.createElement('th');
 
@@ -55,10 +72,10 @@
         th.appendChild(sorts);
       }
 
-      theadtr.appendChild(th);
+      columnLabels.appendChild(th);
     });
 
-    thead.appendChild(theadtr);
+    thead.appendChild(columnLabels);
 
     return thead;
   };

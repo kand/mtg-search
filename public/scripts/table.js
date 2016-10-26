@@ -6,6 +6,7 @@
     var searchRow = document.createElement('tr');
 
     var searchInput = document.createElement('input');
+    var searchResultCount = document.createElement('span');
     searchInput.placeholder = 'Search for cards...';
     searchInput.addEventListener('keyup', function () {
       var url = 'http://0.0.0.0:3000/sets/KLD?';
@@ -16,6 +17,12 @@
 
       App.Api.getSets(url)
         .then(function (cardDataBySet) {
+
+          searchResultCount.innerHTML = Object.keys(cardDataBySet)
+            .reduce(function (count, setAbbrv) {
+              return count + cardDataBySet[setAbbrv].cards.length;
+            }, 0);
+
           tableElement.replaceChild(
             buildTableBody(cardDataBySet, columns),
             tableElement.querySelector('tbody')
@@ -23,6 +30,7 @@
         });
     });
     searchRow.appendChild(searchInput);
+    searchRow.appendChild(searchResultCount);
 
     thead.appendChild(searchRow);
 

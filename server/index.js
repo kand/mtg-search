@@ -33,8 +33,6 @@ app.get('/sets/:setAbbrv/', (req, res) => {
           return include && cardValue === paramName;
         }
 
-        // TODO : include other types
-
         return false;
 
       }, true);

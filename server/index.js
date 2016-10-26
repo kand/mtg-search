@@ -61,6 +61,26 @@ app.get('/sets/:setAbbrv/', (req, res) => {
 
         return ascendingSort * sortResult;
       }, 0));
+    } else if (typeof specialProperties.__allText === 'string') {
+      let transformedQuery = specialProperties.__allText.toLowerCase();
+      let cardTextFields = [
+        'flavor',
+        'name',
+        'text'
+      ];
+
+      data.cards = data.cards.filter((card) => {
+
+        return cardTextFields.reduce((include, fieldKey) => {
+          let cardValue = card[fieldKey];
+          if (typeof cardValue === 'undefined') {
+            return include;
+          }
+
+          let transformedCardValue = cardValue.toLowerCase();
+          return include || transformedCardValue.indexOf(transformedQuery) > -1;
+        }, false);
+      });
     }
   }
 

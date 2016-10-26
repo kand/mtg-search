@@ -8,7 +8,13 @@
     var searchInput = document.createElement('input');
     searchInput.placeholder = 'Search for cards...';
     searchInput.addEventListener('keyup', function () {
-      App.Api.getSets('http://0.0.0.0:3000/sets/KLD?name=' + this.value)
+      var url = 'http://0.0.0.0:3000/sets/KLD?';
+
+      if (this.value) {
+        url += '__allText=' + this.value;
+      }
+
+      App.Api.getSets(url)
         .then(function (cardDataBySet) {
           tableElement.replaceChild(
             buildTableBody(cardDataBySet, columns),
@@ -120,6 +126,9 @@
       }, {
         label: 'Mana Cost',
         field: 'manaCost'
+      }, {
+        label: 'Text',
+        field: 'text'
       }];
 
       table.appendChild(buildTableHead(table, columns));

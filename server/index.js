@@ -64,7 +64,6 @@ app.get('/sets/:setAbbrv/', (req, res) => {
     } else if (typeof specialProperties.__allText === 'string') {
       let transformedQuery = specialProperties.__allText.toLowerCase();
       let cardTextFields = [
-        'flavor',
         'name',
         'text'
       ];

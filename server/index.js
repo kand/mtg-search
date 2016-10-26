@@ -26,7 +26,9 @@ app.get('/sets/:setAbbrv/', (req, res) => {
         let propType = typeof card[paramName];
 
         if (propType === 'string') {
-          return include && cardValue.indexOf(queryValue) > -1;
+          let transformedQuery = queryValue.toLowerCase();
+          let transformedCardValue = cardValue.toLowerCase();
+          return include && transformedCardValue.indexOf(transformedQuery) > -1;
         } else if (propType === 'number') {
           return include && cardValue === paramName;
         }

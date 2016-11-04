@@ -1,5 +1,13 @@
 !(function (App) {
 
+  if (typeof App.actions === 'undefined') {
+    throw new Error('requirement App.actions not available for App.Table!');
+  }
+
+  if (typeof App.store === 'undefined') {
+    throw new Error('requirement App.store not available for App.Table!');
+  }
+
   var buildTableHead = function (tableElement, columns) {
     var thead = document.createElement('thead');
 
@@ -9,13 +17,12 @@
     var searchResultCount = document.createElement('span');
     searchInput.placeholder = 'Search for cards...';
     searchInput.addEventListener('keyup', function () {
-      var url = 'http://0.0.0.0:3000/sets/KLD?';
 
       if (this.value) {
         url += '__allText=' + this.value;
       }
 
-      App.Api.getSets(url)
+      App.Api.getSet('KLD')
         .then(function (cardDataBySet) {
 
           searchResultCount.innerHTML = Object.keys(cardDataBySet)
@@ -94,55 +101,67 @@
     return thead;
   };
 
-  var buildTableBody = function (cardDataBySet, columns) {
+  var buildTableBody = function (cards, columns) {
     var tbody = document.createElement('tbody');
 
-    Object.keys(cardDataBySet).forEach(function (setAbbrv) {
-      cardDataBySet[setAbbrv].cards.forEach(function (card) {
-        var tr = document.createElement('tr');
-        card.currentSet = setAbbrv;
+    cards.forEach(function (card) {
+      var tr = document.createElement('tr');
 
-        columns.forEach(function (column) {
-          var td = document.createElement('td');
-          td.innerHTML = typeof column.field === 'function' ? column.field(card) : card[column.field];
-          tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
+      columns.forEach(function (column) {
+        var td = document.createElement('td');
+        td.innerHTML = typeof column.field === 'function' ? column.field(card) : card[column.field] || 'N/A';
+        tr.appendChild(td);
       });
+
+      tbody.appendChild(tr);
     });
 
     return tbody;
   };
 
+  var buildTable = function () {
+    var table = document.createElement('table');
+
+    var columns = [{
+      label: 'Name',
+      field: 'name',
+      sorts: 'name'
+    }, {
+      label: 'Printings',
+      field: function (card) {
+        return card.printings.join(', ');
+      }
+    }, {
+      label: '#',
+      field: function (card) {
+        return card.number ? card.number : 'N/A';
+      }
+    }, {
+      label: 'Mana Cost',
+      field: 'manaCost'
+    }, {
+      label: 'Text',
+      field: 'text'
+    }];
+
+    table.appendChild(buildTableHead(table, columns));
+
+    var cards = App.store.getState().cards;
+    if (cards) {
+      table.appendChild(buildTableBody(cards, columns));
+    }
+
+    return table;
+  }
+
   App.Table = {
-    build: function (cardDataBySet) {
-      var table = document.createElement('table');
+    bindTo: function (containerId) {
+      var container = document.getElementById(containerId);
 
-      var columns = [{
-        label: 'Name',
-        field: 'name',
-        sorts: 'name'
-      }, {
-        label: 'Set',
-        field: 'currentSet'
-      }, {
-        label: '#',
-        field: function (card) {
-          return card.number ? card.number : 'N/A';
-        }
-      }, {
-        label: 'Mana Cost',
-        field: 'manaCost'
-      }, {
-        label: 'Text',
-        field: 'text'
-      }];
-
-      table.appendChild(buildTableHead(table, columns));
-      table.appendChild(buildTableBody(cardDataBySet, columns));
-
-      return table;
+      App.store.subscribe(function () {
+        container.innerHTML = '';
+        container.appendChild(buildTable());
+      });
     }
   };
 

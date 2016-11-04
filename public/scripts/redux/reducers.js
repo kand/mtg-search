@@ -8,9 +8,14 @@
 
     switch (action.type) {
 
-      case App.actions.REQUEST_CARDS:
+      case App.actions.REQUEST_SET:
         return Object.assign({}, state, {
           isFetching: true
+        });
+
+      case App.actions.CARDS_REQUEST_ERROR:
+        return Object.assign({}, state, {
+          isFetching: false
         });
 
       case App.actions.RECEIVE_CARDS:

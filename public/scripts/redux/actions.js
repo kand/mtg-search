@@ -1,14 +1,22 @@
 !(function (App) {
 
   App.actions = {
-    REQUEST_CARDS: 'REQUEST_CARDS',
+    REQUEST_SET: 'REQUEST_SET',
+    CARDS_REQUEST_ERROR: 'CARDS_REQUEST_ERROR',
     RECEIVE_CARDS: 'RECEIVE_CARDS'
   };
 
 
   App.actions.requestCards = function (setKey) {
     return {
-      type: App.actions.REQUEST_CARDS,
+      type: App.actions.REQUEST_SET,
+      setKey: setKey
+    };
+  };
+
+  App.actions.cardsRequestError = function (setKey) {
+    return {
+      type: App.actions.CARDS_REQUEST_ERROR,
       setKey: setKey
     };
   };

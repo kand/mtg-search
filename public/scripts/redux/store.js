@@ -1,7 +1,7 @@
 !(function (App) {
 
   if (typeof App.reducer === 'undefined') {
-    throw new Error('requirement App.store not available for App.store!');
+    throw new Error('requirement App.reducer not available for App.store!');
   }
 
   var currentState = {};
@@ -16,7 +16,7 @@
       currentState = App.reducer(getState(), action);
 
       listeners.forEach(function (listener) {
-        listener(action);
+        listener();
       });
     },
 

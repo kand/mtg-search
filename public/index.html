@@ -12,20 +12,22 @@
 
     <div id="cardsListContainer"></div>
 
-    <script>window.App = {};</script>
+    <script>
+      window.App = {};
+      window.API_ENDPOINT_ROOT = 'http://0.0.0.0:3000';
+    </script>
 
+    <script src="/scripts/redux/actions.js"></script>
+    <script src="/scripts/redux/reducers.js"></script>
+    <script src="/scripts/redux/store.js"></script>
     <script src="/scripts/api.js"></script>
     <script src="/scripts/deck/deck.js"></script>
     <script src="/scripts/deck/deck-view.js"></script>
     <script src="/scripts/table.js"></script>
 
     <script>
-      window.App.Api.getSets('http://0.0.0.0:3000/sets/KLD/')
-        .then(function (sets) {
-            document.getElementById('cardsListContainer')
-              .appendChild(window.App.Table.build(sets));
-        });
-
+      window.App.Table.bindTo('cardsListContainer');
+      window.App.Api.getSet('KLD');
     </script>
   </body>
 </html>

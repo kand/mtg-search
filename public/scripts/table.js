@@ -79,9 +79,9 @@
       field: 'name',
       sorts: 'name'
     }, {
-      label: 'Printings',
+      label: 'Types',
       field: function (card) {
-        return card.printings.join(', ');
+        return card.types.join(' ');
       }
     }, {
       label: '#',

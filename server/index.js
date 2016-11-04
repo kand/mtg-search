@@ -65,7 +65,8 @@ app.get('/sets/:setAbbrv/', (req, res) => {
       let transformedQuery = specialProperties.__allText.toLowerCase();
       let cardTextFields = [
         'name',
-        'text'
+        'text',
+        'type'
       ];
 
       data.cards = data.cards.filter((card) => {

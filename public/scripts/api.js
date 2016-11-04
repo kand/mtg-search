@@ -8,10 +8,27 @@
     return new Error('requirement App.store not available for App.Api!');
   }
 
+  var paramBuilder = function (obj) {
+
+    if (typeof obj === 'undefined') {
+      return '';
+    }
+
+    var keys = Object.keys(obj);
+    if (keys.length === 0) {
+      return '';
+    }
+
+    return keys.reduce(function (params, key, i) {
+      return params += (i === 0 ? '' : '&') + key + '=' + obj[key];
+    }, '?');
+  };
+
   App.Api = {
-    getSet: function (setKey) {
+    getSet: function (setKey, params) {
 
       return new Promise(function (resolve, reject) {
+
         App.store.dispatch(App.actions.requestCards(setKey));
 
         var request = new XMLHttpRequest();
@@ -37,7 +54,7 @@
             }
           }
         });
-        request.open('GET', window.API_ENDPOINT_ROOT + '/sets/' + setKey);
+        request.open('GET', window.API_ENDPOINT_ROOT + '/sets/' + setKey + paramBuilder(params));
         request.send();
       });
     }

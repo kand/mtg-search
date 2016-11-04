@@ -18,23 +18,12 @@
     searchInput.placeholder = 'Search for cards...';
     searchInput.addEventListener('keyup', function () {
 
+      var params = {};
       if (this.value) {
-        url += '__allText=' + this.value;
+        params.__allText = this.value;
       }
 
-      App.Api.getSet('KLD')
-        .then(function (cardDataBySet) {
-
-          searchResultCount.innerHTML = Object.keys(cardDataBySet)
-            .reduce(function (count, setAbbrv) {
-              return count + cardDataBySet[setAbbrv].cards.length;
-            }, 0);
-
-          tableElement.replaceChild(
-            buildTableBody(cardDataBySet, columns),
-            tableElement.querySelector('tbody')
-          );
-        });
+      App.Api.getSet('KLD', params);
     });
     searchRow.appendChild(searchInput);
     searchRow.appendChild(searchResultCount);
@@ -58,35 +47,17 @@
             this.dataset.sortDirection = 1;
             sorts.classList.add('fa-sort-asc');
 
-            App.Api.getSets('http://0.0.0.0:3000/sets/KLD?__sort=' + column.sorts)
-              .then(function (cardDataBySet) {
-                tableElement.replaceChild(
-                  buildTableBody(cardDataBySet, columns),
-                  tableElement.querySelector('tbody')
-                );
-              });
+            App.Api.getSet('KLD', { __sort: column.sorts });
           } else if (currentSort === 1) {
             sorts.classList.add('fa-sort-desc');
             this.dataset.sortDirection = -1;
 
-            App.Api.getSets('http://0.0.0.0:3000/sets/KLD?__sort=-' + column.sorts)
-              .then(function (cardDataBySet) {
-                tableElement.replaceChild(
-                  buildTableBody(cardDataBySet, columns),
-                  tableElement.querySelector('tbody')
-                );
-              });
+            App.Api.getSet('KLD', { __sort: '-' + column.sorts });
           } else {
             sorts.classList.add('fa-sort');
             this.dataset.sortDirection = 0;
 
-            App.Api.getSets('http://0.0.0.0:3000/sets/KLD')
-              .then(function (cardDataBySet) {
-                tableElement.replaceChild(
-                  buildTableBody(cardDataBySet, columns),
-                  tableElement.querySelector('tbody')
-                );
-              });
+            App.Api.getSet('KLD');
           }
 
         });
@@ -145,11 +116,18 @@
     }];
 
     table.appendChild(buildTableHead(table, columns));
+    var tableBodyElement;
+    App.store.subscribe(function () {
 
-    var cards = App.store.getState().cards;
-    if (cards) {
-      table.appendChild(buildTableBody(cards, columns));
-    }
+      var cards = App.store.getState().cards;
+      if (cards) {
+        if (tableBodyElement) {
+          tableBodyElement.remove();
+        }
+        tableBodyElement = buildTableBody(cards, columns);
+        table.appendChild(tableBodyElement);
+      }
+    });
 
     return table;
   }
@@ -157,11 +135,7 @@
   App.Table = {
     bindTo: function (containerId) {
       var container = document.getElementById(containerId);
-
-      App.store.subscribe(function () {
-        container.innerHTML = '';
-        container.appendChild(buildTable());
-      });
+      container.appendChild(buildTable());
     }
   };
 

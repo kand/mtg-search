@@ -10,6 +10,7 @@
   </head>
   <body>
 
+    <div id="searchBar"></div>
     <div id="cardsListContainer"></div>
 
     <script>
@@ -24,9 +25,12 @@
     <script src="/scripts/deck/deck.js"></script>
     <script src="/scripts/deck/deck-view.js"></script>
     <script src="/scripts/table.js"></script>
+    <script src="/scripts/search-bar.js"></script>
 
     <script>
       window.App.Table.bindTo('cardsListContainer');
+      window.App.Search.bindTo('searchBar');
+
       window.App.Api.getSet('KLD');
     </script>
   </body>

@@ -11,25 +11,6 @@
   var buildTableHead = function (tableElement, columns) {
     var thead = document.createElement('thead');
 
-    var searchRow = document.createElement('tr');
-
-    var searchInput = document.createElement('input');
-    var searchResultCount = document.createElement('span');
-    searchInput.placeholder = 'Search for cards...';
-    searchInput.addEventListener('keyup', function () {
-
-      var params = {};
-      if (this.value) {
-        params.__allText = this.value;
-      }
-
-      App.Api.getSet('KLD', params);
-    });
-    searchRow.appendChild(searchInput);
-    searchRow.appendChild(searchResultCount);
-
-    thead.appendChild(searchRow);
-
     var columnLabels = document.createElement('tr');
     columns.forEach(function (column) {
       var th = document.createElement('th');

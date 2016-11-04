@@ -92,6 +92,9 @@
       label: 'Mana Cost',
       field: 'manaCost'
     }, {
+      label: 'CMC',
+      field: 'cmc'
+    }, {
       label: 'Text',
       field: 'text'
     }];

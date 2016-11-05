@@ -75,16 +75,27 @@
 
     xAxisContainer.select('path')
       .style('stroke', '#fff');
-    xAxisContainer.selectAll('g text, g line')
+    xAxisContainer.selectAll('g line')
       .style('stroke', '#fff');
+    xAxisContainer.selectAll('g text')
+      .style('fill', '#fff');
 
     var yAxisContainer = chartArea.append('g')
       .call(d3.axisLeft(y));
 
     yAxisContainer.select('path')
       .style('stroke', '#fff');
-    yAxisContainer.selectAll('g text, g line')
+    yAxisContainer.selectAll('g line')
       .style('stroke', '#fff');
+    yAxisContainer.selectAll('g text')
+      .style('fill', '#fff');
+    yAxisContainer.append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 6)
+      .attr('dy', '0.71em')
+      .style('fill', '#fff')
+      .style('text-anchor', 'end')
+      .text('Converted Mana Cost');
 
     return svg.node();
   };

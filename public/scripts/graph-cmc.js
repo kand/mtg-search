@@ -22,13 +22,16 @@
           costs[cmc] = costs[cmc] ? costs[cmc] + 1 : 1;
           return costs;
         }, []);
+    var x = d3.scaleLinear()
+        .domain([0, d3.max(data)])
+        .range([0, 200]);
 
     var svg = d3.select(document.createElement('div'));
 
     svg.selectAll('div')
         .data(data)
       .enter().append('div')
-        .style('width', function (cmc) { return cmc * 10 + 'px'; })
+        .style('width', function (cmc) { return x(cmc) + 'px'; })
         .style('background-color', 'blue')
         .style('margin-bottom', '5px')
         .style('text-align', 'right')

@@ -11,6 +11,7 @@
   </head>
   <body>
 
+    <div id="graphCMC"></div>
     <div id="searchBar"></div>
     <div id="cardsListContainer"></div>
 
@@ -23,12 +24,14 @@
     <script src="/scripts/redux/reducers.js"></script>
     <script src="/scripts/redux/store.js"></script>
     <script src="/scripts/api.js"></script>
+    <script src="/scripts/graph-cmc.js"></script>
     <script src="/scripts/table.js"></script>
     <script src="/scripts/search-bar.js"></script>
 
     <script>
       window.App.Table.bindTo('cardsListContainer');
       window.App.Search.bindTo('searchBar');
+      window.App.GraphCMC.bindTo('graphCMC');
 
       window.App.Api.getSet('KLD');
     </script>

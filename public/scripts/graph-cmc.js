@@ -69,15 +69,21 @@
         .style('font', '10px sans-serif')
         .text(function (d) { return d || 0; });
 
-    var xAxis = d3.axisBottom(x);
-
     var xAxisContainer = chartArea.append('g')
       .attr('transform', 'translate(0,' + height + ')')
-      .call(xAxis);
+      .call(d3.axisBottom(x));
 
     xAxisContainer.select('path')
       .style('stroke', '#fff');
     xAxisContainer.selectAll('g text, g line')
+      .style('stroke', '#fff');
+
+    var yAxisContainer = chartArea.append('g')
+      .call(d3.axisLeft(y));
+
+    yAxisContainer.select('path')
+      .style('stroke', '#fff');
+    yAxisContainer.selectAll('g text, g line')
       .style('stroke', '#fff');
 
     return svg.node();

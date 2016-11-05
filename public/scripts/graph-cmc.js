@@ -26,11 +26,20 @@
           return costs;
         }, []);
 
+    // fill in gaps in array with 0s
+    data = Array.from(
+        { length: data.length },
+        function (_, i) { return data[i] || 0; }
+    );
+
+    var x = d3.scaleBand()
+        .domain(data.map(function (d, i) { return i; }))
+        .rangeRound([0, width])
+        .padding(0.1);
+
     var y = d3.scaleLinear()
         .domain([0, d3.max(data)])
         .range([height, 0]);
-
-    var barWidth = width / data.length;
 
     var svg = d3.select(container).append('svg')
         .attr('height', height)
@@ -39,19 +48,19 @@
     var bar = svg.selectAll('g')
           .data(data)
         .enter().append('g')
-          .attr('transform', function (d, i) { return 'translate(' + i * barWidth + ', 0)'; });
+          .attr('transform', function (d, i) { return 'translate(' + x(i) + ', 0)'; });
 
     bar.append('rect')
         .style('fill', 'steelblue')
         .attr('y', function (d) { return y(d) || 0; })
         .attr('height', function (d) { return height - y(d) || 0; })
-        .attr('width', barWidth - 1);
+        .attr('width', x.bandwidth());
 
     bar.append('text')
-        .attr('x', barWidth / 2)
-        .attr('y', function (d) { return height - 10; })
+        .attr('x', x.bandwidth() / 2)
+        .attr('y', function (d) { return height; })
         .attr('dx', '-0.5em')
-        .attr('dy', '0.75em')
+        .attr('dy', '-0.5em')
         .style('fill', 'white')
         .style('font', '10px sans-serif')
         .text(function (d) { return d || 0; });

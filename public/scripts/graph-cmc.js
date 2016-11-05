@@ -14,8 +14,9 @@
       return document.createElement('div');
     }
 
-    var height = 300;
-    var width = 300; 
+    var margin = { top: 30, right: 30, bottom: 30, left: 30 };
+    var height = 300 - margin.top - margin.bottom;
+    var width = 300 - margin.right - margin.left;
 
     var data = cards
         .map(function (card) {
@@ -42,10 +43,13 @@
         .range([height, 0]);
 
     var svg = d3.select(container).append('svg')
-        .attr('height', height)
-        .attr('width', width);
+        .attr('height', height + margin.top + margin.bottom)
+        .attr('width', width + margin.right + margin.left);
 
-    var bar = svg.selectAll('g')
+    var chartArea = svg.append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var bar = chartArea.selectAll('g')
           .data(data)
         .enter().append('g')
           .attr('transform', function (d, i) { return 'translate(' + x(i) + ', 0)'; });
@@ -64,6 +68,17 @@
         .style('fill', 'white')
         .style('font', '10px sans-serif')
         .text(function (d) { return d || 0; });
+
+    var xAxis = d3.axisBottom(x);
+
+    var xAxisContainer = chartArea.append('g')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis);
+
+    xAxisContainer.select('path')
+      .style('stroke', '#fff');
+    xAxisContainer.selectAll('g text, g line')
+      .style('stroke', '#fff');
 
     return svg.node();
   };

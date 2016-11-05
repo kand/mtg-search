@@ -31,10 +31,11 @@
     svg.selectAll('div')
         .data(data)
       .enter().append('div')
-        .style('width', function (cmc) { return x(cmc) + 'px'; })
         .style('background-color', 'blue')
+        .style('color', 'white')
         .style('margin-bottom', '5px')
         .style('text-align', 'right')
+        .style('width', function (cmc) { return x(cmc) + 'px'; })
         .text(function (cmc) { return cmc; });
 
     return svg.node();

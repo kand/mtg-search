@@ -62,7 +62,7 @@
 
     bar.append('text')
         .attr('x', x.bandwidth() / 2)
-        .attr('y', function (d) { return height; })
+        .attr('y', function (d) { return y(d); })
         .attr('dx', '-0.5em')
         .attr('dy', '-0.5em')
         .style('fill', 'white')
@@ -95,7 +95,7 @@
       .attr('dy', '0.71em')
       .style('fill', '#fff')
       .style('text-anchor', 'end')
-      .text('Converted Mana Cost');
+      .text('Number of Cards');
 
     return svg.node();
   };

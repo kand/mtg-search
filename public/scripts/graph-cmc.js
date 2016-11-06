@@ -46,6 +46,14 @@
         .attr('height', height + margin.top + margin.bottom)
         .attr('width', width + margin.right + margin.left);
 
+    svg.append('text')
+        .attr('fill', '#fff')
+        .style('font', '11px sans-serif')
+        .style('font-style', 'italic')
+        .attr('dy', '1em')
+        .attr('x', margin.left / 2)
+        .text('Converted Mana Cost');
+
     var chartArea = svg.append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -63,11 +71,11 @@
     bar.append('text')
         .attr('x', x.bandwidth() / 2)
         .attr('y', function (d) { return y(d); })
-        .attr('dx', '-0.5em')
-        .attr('dy', '-0.5em')
+        .attr('dy', '1em')
         .style('fill', 'white')
         .style('font', '10px sans-serif')
-        .text(function (d) { return d || 0; });
+        .style('text-anchor', 'middle')
+        .text(function (d) { return d || ''; });
 
     var xAxisContainer = chartArea.append('g')
       .attr('transform', 'translate(0,' + height + ')')
@@ -94,6 +102,7 @@
       .attr('y', 6)
       .attr('dy', '0.71em')
       .style('fill', '#fff')
+      .style('font-style', 'italic')
       .style('text-anchor', 'end')
       .text('Number of Cards');
 

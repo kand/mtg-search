@@ -38,6 +38,28 @@ app.get('/sets/:setAbbrv/', (req, res) => {
       }, true);
     });
 
+    if (typeof specialProperties.__allText === 'string') {
+      let transformedQuery = specialProperties.__allText.toLowerCase();
+      let cardTextFields = [
+        'name',
+        'text',
+        'type'
+      ];
+
+      data.cards = data.cards.filter((card) => {
+
+        return cardTextFields.reduce((include, fieldKey) => {
+          let cardValue = card[fieldKey];
+          if (typeof cardValue === 'undefined') {
+            return include;
+          }
+
+          let transformedCardValue = cardValue.toLowerCase();
+          return include || transformedCardValue.indexOf(transformedQuery) > -1;
+        }, false);
+      });
+    }
+
     if (typeof specialProperties.__sort === 'string') {
      let sorts = specialProperties.__sort.split(',');
 
@@ -61,27 +83,28 @@ app.get('/sets/:setAbbrv/', (req, res) => {
 
         return ascendingSort * sortResult;
       }, 0));
-    } else if (typeof specialProperties.__allText === 'string') {
-      let transformedQuery = specialProperties.__allText.toLowerCase();
-      let cardTextFields = [
-        'name',
-        'text',
-        'type'
-      ];
+    }
 
-      data.cards = data.cards.filter((card) => {
+    // loop through remainder
+    Object.keys(specialProperties).forEach(key => {
 
-        return cardTextFields.reduce((include, fieldKey) => {
-          let cardValue = card[fieldKey];
-          if (typeof cardValue === 'undefined') {
-            return include;
+      if (key.startsWith('__includes__')) {
+
+        let fieldName = key.split('__')[2];
+        let filterValue = specialProperties[key];
+        data.cards = data.cards.filter(card => {
+
+          let cardField = card[fieldName];
+          if (typeof cardField === 'undefined') {
+            return false;
+          } else if (Array.isArray(cardField) && cardField.includes(filterValue)) {
+            return true;
           }
 
-          let transformedCardValue = cardValue.toLowerCase();
-          return include || transformedCardValue.indexOf(transformedQuery) > -1;
-        }, false);
-      });
-    }
+          return false;
+        });
+      }
+    });
   }
 
   // allow local CORs

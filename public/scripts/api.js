@@ -25,7 +25,7 @@
   };
 
   App.Api = {
-    getSet: function (setKey, params) {
+    getSet: function (setKey) {
 
       return new Promise(function (resolve, reject) {
 
@@ -54,7 +54,8 @@
             }
           }
         });
-        request.open('GET', window.API_ENDPOINT_ROOT + '/sets/' + setKey + paramBuilder(params));
+        var params = paramBuilder(App.store.getState().searchFilters);
+        request.open('GET', window.API_ENDPOINT_ROOT + '/sets/' + setKey + params);
         request.send();
       });
     }

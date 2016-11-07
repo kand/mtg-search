@@ -16,7 +16,7 @@
     return searchResultCount;
   };
 
-  var buildFilters = function () {
+  var buildColorFilters = function () {
 
     var filters = document.createElement('div');
 
@@ -26,10 +26,19 @@
 
       var checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
+      checkbox.value = color;
       checkbox.addEventListener('click', function () {
-        App.store.dispatch(App.actions.updateSearchParams({
-          __includes__colorIdentity: color
-        }));
+        var colors = Array.from(filters.getElementsByTagName('input'))
+          .reduce(function (include, ele) {
+            if (ele.checked) {
+              include.push(ele.value);
+            }
+            return include;
+          }, []);
+
+        App.store.dispatch(
+          App.actions.updateSearchParam('__includes__colorIdentity', colors)
+        );
         App.Api.getSet('KLD');
       });
       colorCheckboxContainer.appendChild(checkbox);
@@ -49,9 +58,7 @@
     searchInput.placeholder = 'Search for cards...';
     searchInput.addEventListener('keyup', function () {
 
-      App.store.dispatch(App.actions.updateSearchParams({
-        __allText: this.value
-      }));
+      App.store.dispatch(App.actions.updateSearchParam('__allText', this.value));
       App.Api.getSet('KLD');
     });
 
@@ -66,7 +73,7 @@
       var searchResultCount = buildSearchResultCount();
       container.appendChild(searchResultCount);
 
-      container.appendChild(buildFilters());
+      container.appendChild(buildColorFilters());
 
       App.store.subscribe(function () {
 

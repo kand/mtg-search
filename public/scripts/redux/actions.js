@@ -5,21 +5,15 @@
     CARDS_REQUEST_ERROR: 'CARDS_REQUEST_ERROR',
     RECEIVE_CARDS: 'RECEIVE_CARDS',
     UPDATE_SEARCH_PARAMS: 'UPDATE_SEARCH_PARAMS',
-    TOGGLE_SEARCH_PARAMS: 'TOGGLE_SEARCH_PARAMS',
+    REMOVE_SEARCH_PARAM: 'REMOVE_SEARCH_PARAM',
   };
 
-  App.actions.updateSearchParams = function (params) {
+  App.actions.updateSearchParam = function (key, value) {
     return {
-      type: App.actions.UPDATE_SEARCH_PARAMS,
-      updatedSearchParams: params
+      type: App.actions.UPDATE_SEARCH_PARAM,
+      updateKey: key,
+      value: value
     };
-  };
-
-  App.actions.toggleSearchParams = function (keys) {
-    return {
-      type: App.actions.TOGGLE_SEARCH_PARAMS,
-      toggleSearchParams: keys
-    }
   };
 
   App.actions.requestCards = function (setKey) {

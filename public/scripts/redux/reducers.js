@@ -24,24 +24,12 @@
           cards: action.cards
         });
 
-      case App.actions.UPDATE_SEARCH_PARAMS:
-        return Object.assign({}, state, {
-          searchFilters: Object.assign({}, state.searchFilters,
-            action.updatedSearchParams)
-        });
-
-      case App.actions.TOGGLE_SEARCH_PARAMS:
-        var newSearchFilters = Object.assign({}, state.searchFilters);
-        action.toggleSearchParams.forEach(function (key) {
-          if (typeof newSearchFilters[key] === 'undefined') {
-            newSearchFilters[key] = true;
-          } else {
-            delete newSearchFilters[key];
-          }
-        });
+      case App.actions.UPDATE_SEARCH_PARAM:
+        var updateFilters = {};
+        updateFilters[action.updateKey] = action.value;
 
         return Object.assign({}, state, {
-          searchFilters: newSearchFilters
+          searchFilters: Object.assign({}, state.searchFilters, updateFilters)
         });
 
       default:

@@ -20,7 +20,18 @@
     }
 
     return keys.reduce(function (params, key, i) {
-      return params += (i === 0 ? '' : '&') + key + '=' + obj[key];
+      var val;
+      if (Array.isArray(obj[key])) {
+        val = obj[key].join(',');
+      } else {
+        val = obj[key];
+      }
+
+      if (val) {
+        return params += (i === 0 ? '' : '&') + key + '=' + val;
+      }
+
+      return params;
     }, '?');
   };
 

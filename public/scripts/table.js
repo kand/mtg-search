@@ -28,21 +28,17 @@
             this.dataset.sortDirection = 1;
             sorts.classList.add('fa-sort-asc');
 
-            App.store.dispatch(App.actions.updateSearchParams({
-              __sort: column.sorts
-            }));
+            App.store.dispatch(App.actions.updateSearchParam('__sort', column.sorts));
           } else if (currentSort === 1) {
             sorts.classList.add('fa-sort-desc');
             this.dataset.sortDirection = -1;
 
-            App.store.dispatch(App.actions.updateSearchParams({
-              __sort: '-' + column.sorts
-            }));
+            App.store.dispatch(App.actions.updateSearchParam('__sort', '-' + column.sorts));
           } else {
             sorts.classList.add('fa-sort');
             this.dataset.sortDirection = 0;
 
-            App.store.dispatch(App.actions.toggleSearchParams(['__sort']));
+            App.store.dispatch(App.actions.updateSearchParam('__sort', ''));
           }
 
           App.Api.getSet('KLD');

@@ -91,14 +91,16 @@ app.get('/sets/:setAbbrv/', (req, res) => {
       if (key.startsWith('__includes__')) {
 
         let fieldName = key.split('__')[2];
-        let filterValue = specialProperties[key];
+        let filterValues = specialProperties[key].split(',');
         data.cards = data.cards.filter(card => {
 
           let cardField = card[fieldName];
           if (typeof cardField === 'undefined') {
             return false;
-          } else if (Array.isArray(cardField) && cardField.includes(filterValue)) {
-            return true;
+          } else if (Array.isArray(cardField)) {
+            return filterValues.reduce((include, curr) => {
+              return include && cardField.includes(curr);
+            }, true);
           }
 
           return false;

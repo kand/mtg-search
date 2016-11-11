@@ -84,7 +84,21 @@
         .style('fill', 'steelblue')
         .attr('y', function (d) { return y(d) || 0; })
         .attr('height', function (d) { return height - y(d) || 0; })
-        .attr('width', x.bandwidth());
+        .attr('width', x.bandwidth())
+        .on('mouseover', function () {
+          d3.select(this)
+            .style('fill', 'orange');
+
+          d3.select(this.parentElement).select('text')
+            .style('opacity', 1);
+        })
+        .on('mouseout', function () {
+          d3.select(this)
+            .style('fill', 'steelblue');
+
+          d3.select(this.parentElement).select('text')
+            .style('opacity', 0);
+        });
 
     bar.append('text')
         .attr('x', x.bandwidth() / 2)
@@ -92,6 +106,7 @@
         .attr('dy', '1em')
         .style('fill', 'white')
         .style('font', '10px sans-serif')
+        .style('opacity', 0)
         .style('text-anchor', 'middle')
         .text(function (d) { return d || ''; });
 

@@ -57,7 +57,25 @@
     var chartArea = svg.append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var bar = chartArea.selectAll('g')
+    var gridContainer = chartArea.append('g');
+
+    gridContainer.append('g').selectAll('line')
+        .data(y.ticks())
+      .enter().append('line')
+        .attr('y1', function (d) { return y(d) + 0.5; })
+        .attr('x2', width)
+        .attr('y2', function (d) { return y(d) + 0.5; })
+        .style('stroke', '#333');
+
+    gridContainer.append('g').selectAll('line')
+        .data(x.domain())
+      .enter().append('line')
+        .attr('x1', function (d) { return x(d) + x.bandwidth() / 2 + 0.5; })
+        .attr('x2', function (d) { return x(d) + x.bandwidth() / 2 + 0.5; })
+        .attr('y2', height)
+        .style('stroke', '#333');
+
+    var bar = chartArea.append('g').selectAll('g')
           .data(data)
         .enter().append('g')
           .attr('transform', function (d, i) { return 'translate(' + x(i) + ', 0)'; });

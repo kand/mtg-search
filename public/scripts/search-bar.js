@@ -8,48 +8,16 @@
     throw new Error('requirement App.store not available for App.Search!');
   }
 
+  if (typeof App.DynamicFilter === 'undefined') {
+    throw new Error('requirement App.DynamicFilter not available for App.Search!');
+  }
+
   var buildSearchResultCount = function () {
 
     var searchResultCount = document.createElement('span');
     searchResultCount.innerHTML = '0 Results';
 
     return searchResultCount;
-  };
-
-  var buildColorFilters = function () {
-
-    var filters = document.createElement('div');
-
-    var colors = ['W', 'U', 'B', 'R', 'G'];
-    colors.forEach(function (color) {
-      var colorCheckboxContainer = document.createElement('label');
-
-      var checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.value = color;
-      checkbox.addEventListener('click', function () {
-        var colors = Array.from(filters.getElementsByTagName('input'))
-          .reduce(function (include, ele) {
-            if (ele.checked) {
-              include.push(ele.value);
-            }
-            return include;
-          }, []);
-
-        App.store.dispatch(
-          App.actions.updateSearchParam('__includes__colorIdentity', colors)
-        );
-        App.Api.getSet('KLD');
-      });
-      colorCheckboxContainer.appendChild(checkbox);
-
-      var text = document.createTextNode(color);
-      colorCheckboxContainer.appendChild(text);
-
-      filters.appendChild(colorCheckboxContainer);
-    });
-
-    return filters;
   };
 
   var buildSearchBar = function () {
@@ -73,7 +41,12 @@
       var searchResultCount = buildSearchResultCount();
       container.appendChild(searchResultCount);
 
-      container.appendChild(buildColorFilters());
+      var colorFilters = document.createElement('div');
+      App.DynamicFilter.bindTo(colorFilters, {
+        title: 'Color',
+        cardField: 'colorIdentity'
+      });
+      container.appendChild(colorFilters);
 
       App.store.subscribe(function () {
 

@@ -94,12 +94,14 @@ app.get('/sets/:setAbbrv/', (req, res) => {
         let filterValues = specialProperties[key].split(',');
         data.cards = data.cards.filter(card => {
 
-          let cardField = card[fieldName];
-          if (typeof cardField === 'undefined') {
+          let cardValue = card[fieldName];
+          if (typeof cardValue === 'undefined') {
             return false;
-          } else if (Array.isArray(cardField)) {
+          } else if (typeof cardValue === 'string') {
+            return filterValues.includes(cardValue);
+          } else if (Array.isArray(cardValue)) {
             return filterValues.reduce((include, curr) => {
-              return include && cardField.includes(curr);
+              return include && cardValue.includes(curr);
             }, true);
           }
 

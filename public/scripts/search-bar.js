@@ -39,7 +39,7 @@
         App.store.dispatch(
           App.actions.updateSearchParam('__includes__colorIdentity', colors)
         );
-        App.Api.getSet('KLD');
+        App.Api.getSet('AER');
       });
       colorCheckboxContainer.appendChild(checkbox);
 

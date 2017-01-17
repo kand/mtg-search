@@ -41,7 +41,7 @@
             App.store.dispatch(App.actions.updateSearchParam('__sort', ''));
           }
 
-          App.Api.getSet('KLD');
+          App.Api.getSet('AER');
         });
         th.appendChild(sorts);
       }

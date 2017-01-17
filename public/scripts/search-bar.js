@@ -42,9 +42,15 @@
       container.appendChild(searchResultCount);
 
       var colorFilters = document.createElement('div');
+      var cardField = 'colorIdentity';
       App.DynamicFilter.bindTo(colorFilters, {
         title: 'Color',
-        cardField: 'colorIdentity'
+        cardField: cardField,
+        fieldMapper: function (cards) {
+          return cards.reduce(function (values, card) {
+            return values.concat(card[cardField]);
+          }, []);
+        }
       });
       container.appendChild(colorFilters);
 

@@ -4,7 +4,9 @@
     throw new Error('requirement App.reducer not available for App.store!');
   }
 
-  var currentState = {};
+  var currentState = {
+    searchFilters: []
+  };
   var listeners = [];
 
   var getState = function () {

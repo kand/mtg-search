@@ -16,38 +16,42 @@
     title.innerHTML = options.title;
     filters.appendChild(title);
 
-    cards.map(options.fieldMapper).forEach(function (value) {
-      var checkboxContainer = document.createElement('label');
+    options.fieldMapper(cards)
+      .reduce(function (values, value) {
+        return values.includes(value) ? values : values.concat(value);
+      }, [])
+      .forEach(function (value) {
+        var checkboxContainer = document.createElement('label');
 
-      var checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.value = value;
-      checkbox.addEventListener('click', function () {
-        var filterKey = '__includes__' + option.cardField;
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = value;
+        checkbox.addEventListener('click', function () {
+          var filterKey = '__includes__' + options.cardField;
 
-        var currentValues = App.store.getState().searchFilters[filterKey];
-        if (!Array.isArray(currentValues)) {
-          currentValues = [];
-        }
+          var currentValues = App.store.getState().searchFilters[filterKey];
+          if (!Array.isArray(currentValues)) {
+            currentValues = [];
+          }
 
-        if (this.checked && !currentValues.includes(this.value)) {
-          currentValues.push(this.value);
-        } else if (!this.checked && currentValues.includes(this.value)) {
-          currentValues.splice(currentValues.indexOf(this.value), 1);
-        }
+          if (this.checked && !currentValues.includes(this.value)) {
+            currentValues.push(this.value);
+          } else if (!this.checked && currentValues.includes(this.value)) {
+            currentValues.splice(currentValues.indexOf(this.value), 1);
+          }
 
-        App.store.dispatch(
-          App.actions.updateSearchParam('__includes__' + option.cardField, currentValues)
-        );
-        App.Api.getSet('KLD');
+          App.store.dispatch(
+            App.actions.updateSearchParam('__includes__' + options.cardField, currentValues)
+          );
+          App.Api.getSet('KLD');
+        });
+        checkboxContainer.appendChild(checkbox);
+
+        var text = document.createTextNode(value);
+        checkboxContainer.appendChild(text);
+
+        filters.append(checkboxContainer);
       });
-      checkboxContainer.appendChild(checkbox);
-
-      var text = document.createTextNode(value);
-      checkboxContainer.appendChild(text);
-
-      filters.append(checkboxContainer);
-    });
 
     return filters;
   };
@@ -64,15 +68,17 @@
         throw new Error('App.DynamicFilter container must be an ID string or an HTMLELement!');
       }
 
-      var optionsDefaulted = Object.assign({
+      var defaultOptions = {
         title: 'Unnamed Filter',
-        cardField: null,
-        fieldMapper: function (card) {
-// TODO : this is window, doesn't return proper field
-// TODO : need to handle the case where this value is an array
-          return card[this.cardfield];
-        }
-      }, options);
+        cardField: null
+      };
+      defaultOptions.fieldMapper = function (cards) {
+        return cards.map(function (card) {
+          return card[defaultOptions.cardField]
+        });
+      };
+
+      var optionsDefaulted = Object.assign(defaultOptions, options);
 
       if (typeof optionsDefaulted.cardField === 'undefined') {
         throw new Error('App.DynamicFilter not given required cardField!');

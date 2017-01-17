@@ -27,7 +27,7 @@
     searchInput.addEventListener('keyup', function () {
 
       App.store.dispatch(App.actions.updateSearchParam('__allText', this.value));
-      App.Api.getSet('KLD');
+      App.Api.getSet('AER');
     });
 
     return searchInput;
